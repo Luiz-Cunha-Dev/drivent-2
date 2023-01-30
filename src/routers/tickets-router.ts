@@ -4,9 +4,9 @@ import { allTicketsTypes, newTicket, userTicket } from "@/controllers";
 
 const ticketsRouter = Router();
 
-ticketsRouter.get("/", userTicket);
-ticketsRouter.get("/types", allTicketsTypes);
+ticketsRouter.get("/", authenticateToken, userTicket);
+ticketsRouter.get("/types", authenticateToken, allTicketsTypes);
 
-ticketsRouter.post("/", newTicket);
+ticketsRouter.post("/", authenticateToken, newTicket);
 
 export { ticketsRouter };

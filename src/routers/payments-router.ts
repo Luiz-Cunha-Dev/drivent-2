@@ -4,8 +4,8 @@ import { Router } from "express";
 
 const paymentsRouter = Router();
 
-paymentsRouter.get("/", ticketInformation);
+paymentsRouter.get("/", authenticateToken, ticketInformation);
 
-paymentsRouter.post("/process", newPayment);  
+paymentsRouter.post("/process", authenticateToken, newPayment);  
 
 export { paymentsRouter };

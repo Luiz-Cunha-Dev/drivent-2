@@ -15,6 +15,8 @@ export type GetFirstEventResult = Omit<Event, "createdAt" | "updatedAt">;
 
 async function isCurrentEventActive(): Promise<boolean> {
   const event = await eventRepository.findFirst();
+  console.log(event);
+  
   if (!event) return false;
 
   const now = dayjs();

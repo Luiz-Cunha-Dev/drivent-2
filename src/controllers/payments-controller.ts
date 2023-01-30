@@ -1,12 +1,11 @@
 import paymentRepository from "@/repositories/payment-repository";
-import ticketRepository from "@/repositories/ticket-repository";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
 export async function ticketInformation(req: Request, res: Response) {
 
   // const userId = req.userId;
-  const userId = 867;
+  const userId = res.locals.userId;
   const {ticketId} = req.query;
 
   if(!ticketId){
@@ -16,6 +15,8 @@ export async function ticketInformation(req: Request, res: Response) {
   try {
     const payment = await paymentRepository.findUniquePayment(Number(ticketId), userId);
 
+    console.log(payment);
+    
     return res.send(payment).status(200)
 
   } catch (error) {
@@ -46,7 +47,7 @@ export async function newPayment(req: Request, res: Response) {
   }
 
   // const userId = req.userId;
-  const userId = 867;
+  const userId = res.locals.userId;
   const paymentInformation = req.body as boryType;
 
   if(!paymentInformation.cardData || !paymentInformation.ticketId){
@@ -55,6 +56,9 @@ export async function newPayment(req: Request, res: Response) {
 
   try {
     const payment = await paymentRepository.createPayment(paymentInformation, userId);
+    await paymentRepository.updateStatusTicket(paymentInformation.ticketId)
+
+
 
     return res.send(payment).status(200)
 

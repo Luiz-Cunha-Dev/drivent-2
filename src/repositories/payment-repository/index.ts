@@ -33,6 +33,9 @@ async function findUniquePayment(ticketId: number, userId: number) {
     where:{ticketId}
   })
 
+  if(!payment){
+    throw {name: "NOT_FOUND"}
+  }
 
   return payment;
 }
@@ -42,6 +45,7 @@ async function createPayment(paymentInformation: boryType, userId: number) {
     where:{id: paymentInformation.ticketId},
     select:{ticketTypeId:true, enrollmentId:true}
   })
+
   
   if(!ticket){
     throw {name: "NOT_FOUND"}
@@ -67,7 +71,7 @@ async function createPayment(paymentInformation: boryType, userId: number) {
       ticketId: paymentInformation.ticketId,
       value: price,
       cardIssuer: paymentInformation.cardData.issuer,
-      cardLastDigits: paymentInformation.cardData.number.toString().slice(-2)
+      cardLastDigits: paymentInformation.cardData.number.toString().slice(-4)
     }
   })
 
@@ -75,9 +79,20 @@ async function createPayment(paymentInformation: boryType, userId: number) {
 
 }
 
+async function updateStatusTicket(ticketId: number) {
+
+  await prisma.ticket.update({
+    where:{id: ticketId},
+    data:{status:"PAID"}
+  })
+
+}
+
+
 const paymentRepository = {
 findUniquePayment,
-createPayment
+createPayment,
+updateStatusTicket
 };
 
 export default paymentRepository;

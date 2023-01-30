@@ -12,7 +12,7 @@ async function finduniqueTicketByUserId(userId: number) {
     throw {name: "NOT_FOUND"}
   }
 
-  const data = await prisma.ticket.findMany({
+  const data = await prisma.ticket.findFirst({
     where:{enrollmentId: enrollment.id},
     include:{TicketType:true}
   })

@@ -18,7 +18,7 @@ export async function allTicketsTypes(req: Request, res: Response) {
 export async function userTicket(req: Request, res: Response) {
    
     // const userId = req.userId;
-    const userId = 867;
+    const userId = res.locals.userId;
 
     try {
       const ticket = await ticketRepository.finduniqueTicketByUserId(userId);
@@ -40,7 +40,7 @@ export async function userTicket(req: Request, res: Response) {
     }
 
     // const userId = req.userId;
-    const userId = 867;
+    const userId = res.locals.userId;
     const {ticketTypeId} = req.body as bodyType;
 
     if(!ticketTypeId){
@@ -50,7 +50,7 @@ export async function userTicket(req: Request, res: Response) {
     try {
       const ticket = await ticketRepository.createTicket(userId, ticketTypeId);
       
-      return res.send(ticket).status(201)
+      return res.status(201).send(ticket)
   
     } catch (error) {
       if(error.name === "NOT_FOUND"){
